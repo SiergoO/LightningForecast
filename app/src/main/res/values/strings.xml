@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Lightning Forecast</string>
+
+    <!-- Screen titles -->
+    <string name="overview_screen_title">Overview</string>
+    <string name="forecast_screen_title">Forecast</string>
+</resources>
