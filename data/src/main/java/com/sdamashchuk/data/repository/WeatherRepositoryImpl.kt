@@ -1,9 +1,11 @@
 package com.sdamashchuk.data.repository
 
+import com.sdamashchuk.data.mapper.toWeather
 import com.sdamashchuk.data.net.NetworkChecker
 import com.sdamashchuk.data.net.api.OpenMeteoApi
 import com.sdamashchuk.domain.repository.WeatherRepository
-import com.sdamashchuk.model.Forecast
+import com.sdamashchuk.model.WeatherData
+import java.time.LocalDateTime
 
 class WeatherRepositoryImpl(
     private val openMeteoApi: OpenMeteoApi,
@@ -12,7 +14,7 @@ class WeatherRepositoryImpl(
 
     override suspend fun isConnected(): Boolean = networkChecker.isConnected
 
-    override suspend fun getForecast(): Forecast {
-        return Forecast("")
+    override suspend fun getHourlyForecast(latitude: Double, longitude: Double): Map<LocalDateTime, WeatherData> {
+        return openMeteoApi.getHourlyForecast(latitude, longitude).toWeather().hourly
     }
 }

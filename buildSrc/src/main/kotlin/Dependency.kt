@@ -14,6 +14,7 @@ object Dependency {
         const val MATERIAL_ICONS = "androidx.compose.material:material-icons-extended:$VERSION_COMPOSE"
         const val ACTIVITY = "androidx.activity:activity-compose:1.7.1"
         const val ANIMATED_NAVIGATION = "com.google.accompanist:accompanist-navigation-animation:$VERSION_ACCOMPANIST"
+        const val LOTTIE = "com.airbnb.android:lottie-compose:6.0.0"
     }
 
     object OrbitMVI {
@@ -58,6 +59,12 @@ object Dependency {
     object Kotlin {
         private const val VERSION = "1.8.21"
         const val REFLECT = "org.jetbrains.kotlin:kotlin-reflect:$VERSION"
+    }
+
+    object PlayServices {
+        private const val VERSION = "17.0.0"
+        const val PLACES = "com.google.android.gms:play-services-places:$VERSION"
+        const val LOCATION = "com.google.android.gms:play-services-location:$VERSION"
     }
 
     object Coil {

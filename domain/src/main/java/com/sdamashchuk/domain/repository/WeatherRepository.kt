@@ -1,10 +1,11 @@
 package com.sdamashchuk.domain.repository
 
-import com.sdamashchuk.model.Forecast
+import com.sdamashchuk.model.WeatherData
+import java.time.LocalDateTime
 
 interface WeatherRepository {
 
     suspend fun isConnected(): Boolean
 
-    suspend fun getForecast(): Forecast
+    suspend fun getHourlyForecast(latitude: Double, longitude: Double): Map<LocalDateTime, WeatherData>
 }

@@ -1,5 +1,9 @@
 package com.sdamashchuk.app
 
+import android.Manifest
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -7,13 +11,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.sdamashchuk.app.navigation.AppNavigation
 import com.sdamashchuk.app.navigation.NavDestination
-import com.sdamashchuk.common.compose.component.TopBar
+import com.sdamashchuk.common.ui.compose.component.TopBar
 
 @Composable
 internal fun MainContainer(
@@ -40,12 +46,23 @@ internal fun MainContainer(
                 .padding(it),
             contentColor = MaterialTheme.colorScheme.background
         ) {
-            AppNavigation(
-                navController = animatedNavController,
-                startDestination = NavDestination.Overview.destination,
-                screenTitle,
-                navigationIconVisibilityState
+            val wasPermissionShown = remember { mutableStateOf(false) }
+            val cameraPermissionResultLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.RequestPermission(),
+                onResult = { wasPermissionShown.value = true }
             )
+            if (!wasPermissionShown.value) {
+                SideEffect {
+                    cameraPermissionResultLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+            } else {
+                AppNavigation(
+                    navController = animatedNavController,
+                    startDestination = NavDestination.Overview.destination,
+                    screenTitle,
+                    navigationIconVisibilityState
+                )
+            }
         }
     }
     onContainerReady()

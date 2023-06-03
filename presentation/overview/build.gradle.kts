@@ -18,6 +18,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -50,10 +52,14 @@ dependencies {
     implementation(Dependency.Compose.ACTIVITY)
     implementation(Dependency.Compose.PREVIEW)
     implementation(Dependency.Compose.TOOLING)
+    implementation(Dependency.Compose.LOTTIE)
 
     implementation(Dependency.OrbitMVI.CORE)
     implementation(Dependency.OrbitMVI.VIEWMODEL)
     implementation(Dependency.OrbitMVI.COMPOSE)
+
+    implementation(Dependency.PlayServices.LOCATION)
+    implementation(Dependency.PlayServices.PLACES)
 
     implementation(Dependency.Coil.COMPOSE)
 

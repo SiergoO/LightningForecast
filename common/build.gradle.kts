@@ -3,6 +3,7 @@ import dependencies.Dependency
 plugins {
     id(Plugin.ANDROID_LIBRARY)
     id(Plugin.KOTLIN_ANDROID)
+    id(Plugin.PARCELIZE)
 }
 
 android {
@@ -18,6 +19,8 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
@@ -38,6 +41,7 @@ android {
 }
 
 dependencies {
+    implementation(project(Module.DOMAIN))
 
     implementation(Dependency.KoIn.CORE)
     implementation(Dependency.KoIn.ANDROID)

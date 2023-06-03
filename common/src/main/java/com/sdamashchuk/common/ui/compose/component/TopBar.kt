@@ -1,4 +1,4 @@
-package com.sdamashchuk.common.compose.component
+package com.sdamashchuk.common.ui.compose.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

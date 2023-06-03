@@ -4,4 +4,5 @@ object Plugin {
     const val KOTLIN_ANDROID = "org.jetbrains.kotlin.android"
     const val KOTLIN_KAPT = "org.jetbrains.kotlin.kapt"
     const val SERIALIZATION = "org.jetbrains.kotlin.plugin.serialization"
+    const val PARCELIZE = "kotlin-parcelize"
 }
