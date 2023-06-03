@@ -38,15 +38,15 @@ fun ForecastDTO.toDailyForecast(): DailyForecast {
 
 fun ForecastDTO.toHourlyForecast(): HourlyForecast {
     return HourlyForecast(
-        current = if (currentWeather != null) CurrentWeatherData(
-            isDay = currentWeather.isDay == 1,
-            temperature = currentWeather.temperature,
-            windSpeed = currentWeather.windSpeed,
-            windDirection = currentWeather.windDirection.roundToInt(),
-            humidity = hourly?.relativeHumidity2m?.firstOrNull(),
-            precipitationProbability = hourly?.precipitationProbability?.firstOrNull(),
-            type = WeatherType.fromWMO(currentWeather.weatherCode)
-        ) else null,
+        current = CurrentWeatherData(
+            isDay = currentWeather?.isDay == 1,
+            temperature = currentWeather?.temperature ?: 0.0,
+            windSpeed = currentWeather?.windSpeed ?: 0.0,
+            windDirection = currentWeather?.windDirection?.roundToInt() ?: 0,
+            humidity = hourly?.relativeHumidity2m?.firstOrNull() ?: 0,
+            precipitationProbability = hourly?.precipitationProbability?.firstOrNull() ?: 0,
+            type = WeatherType.fromWMO(currentWeather?.weatherCode ?: 0)
+        ),
         hourly = if (hourly != null) List(hourly.time.size) { index ->
             val time = hourly.time[index]
             val temperature = hourly.temperature2m[index]

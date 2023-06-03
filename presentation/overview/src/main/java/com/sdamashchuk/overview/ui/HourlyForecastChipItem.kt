@@ -3,7 +3,6 @@ package com.sdamashchuk.overview.ui
 import androidx.annotation.RawRes
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -15,17 +14,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
+import com.sdamashchuk.common.ui.compose.component.AnimatedIcon
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -38,19 +31,21 @@ fun HourlyForecastChip(
     onSelected: () -> Unit
 ) {
     val chipInteractionSource = remember { MutableInteractionSource() }
-    val contentColor = if (isSelected) MaterialTheme.colorScheme.secondary else Color.DarkGray
+    val contentColor = if (isSelected) {
+        MaterialTheme.colorScheme.secondary
+    } else {
+        MaterialTheme.colorScheme.onPrimaryContainer
+    }
     Chip(
         modifier = Modifier
             .wrapContentSize(),
         colors = if (isSelected) {
             ChipDefaults.chipColors(
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.background
+                backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer,
             )
         } else {
             ChipDefaults.chipColors(
-                backgroundColor = Color.LightGray,
-                contentColor = MaterialTheme.colorScheme.primary
+                backgroundColor = MaterialTheme.colorScheme.primaryContainer,
             )
         },
         shape = ShapeDefaults.ExtraLarge,
@@ -67,18 +62,10 @@ fun HourlyForecastChip(
                 color = contentColor,
                 style = MaterialTheme.typography.titleSmall
             )
-            Box(modifier = Modifier.size(60.dp)) {
-                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(iconRes))
-                val progress by animateLottieCompositionAsState(
-                    composition,
-                    iterations = LottieConstants.IterateForever,
-                    speed = 1f
-                )
-                LottieAnimation(
-                    composition = composition,
-                    progress = { progress },
-                )
-            }
+            AnimatedIcon(
+                modifier = Modifier.size(60.dp),
+                iconRes = iconRes
+            )
             Text(
                 text = "${temperature.roundToInt()}°",
                 color = contentColor,

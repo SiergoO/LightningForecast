@@ -14,6 +14,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 
@@ -25,7 +27,7 @@ fun TopBar(
     onBackPressed: () -> Unit
 ) {
     TopAppBar(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
             titleContentColor = MaterialTheme.colorScheme.onBackground,
@@ -33,13 +35,17 @@ fun TopBar(
         ),
         title = {
             Text(
-                modifier = Modifier.padding(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
                     start = 8.dp,
                     end = 16.dp,
                     bottom = 4.dp
                 ),
                 text = title,
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineLarge,
+                fontWeight = FontWeight.SemiBold,
                 overflow = TextOverflow.Ellipsis
             )
         },

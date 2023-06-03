@@ -7,50 +7,65 @@ import com.sdamashchuk.common.ui.mapper.toHourlyWeatherDataUIOList
 import com.sdamashchuk.common.ui.model.CurrentWeatherDataUIO
 import com.sdamashchuk.common.ui.model.HourlyWeatherDataUIO
 import com.sdamashchuk.domain.usecase.GetHourlyForecastUseCase
-import com.sdamashchuk.model.CurrentWeatherData
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
+import java.time.LocalDateTime
 
 class OverviewViewModel(
     private val getHourlyForecastUseCase: GetHourlyForecastUseCase
 ) : BaseViewModel<OverviewViewModel.State, OverviewViewModel.SideEffect>(State()) {
 
     fun sendAction(action: Action) {
-        when (action) {
-            is Action.LocationDetected -> {
-                viewModelScope.launch {
-                    getHourlyForecastUseCase.invoke(GetHourlyForecastUseCase.Param(action.latitude, action.longitude))
-                        .onSuccess {
-                            intent {
-                                reduce {
-                                    state.copy(
-                                        isLoading = false,
-                                        hourlyWeatherData = it.hourly.toHourlyWeatherDataUIOList(),
-                                        currentWeatherData = it.current.toCurrentWeatherDataUIO()
-                                    )
-                                }
-                            }
-                        }.onFailure {
-                            intent {
-                                postSideEffect(SideEffect.ShowError(it.message))
-                                reduce {
-                                    state.copy(
-                                        isLoading = false
-                                    )
-                                }
-                            }
-                        }
+        intent {
+            when (action) {
+                is Action.LocationDetected -> {
+                    reduce {
+                        state.copy(
+                            latitude = action.latitude,
+                            longitude = action.longitude
+                        )
+                    }
+                    loadHourlyForecast(action.latitude, action.longitude)
                 }
-            }
 
-            is Action.ShowMoreClicked -> {
-                intent {
+                is Action.ShowMoreClicked -> {
                     postSideEffect(SideEffect.NavigateToForecast)
                 }
             }
+        }
+    }
+
+    private fun loadHourlyForecast(latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            getHourlyForecastUseCase.invoke(GetHourlyForecastUseCase.Param(latitude, longitude))
+                .onSuccess {
+                    intent {
+                        reduce {
+                            state.copy(
+                                isLoading = false,
+                                latitude = it.latitude,
+                                longitude = it.longitude,
+                                hourlyWeatherData = it.hourly
+                                    .filter { it.dateTime.isAfter(LocalDateTime.now()) }
+                                    .take(24)
+                                    .toHourlyWeatherDataUIOList(),
+                                currentWeatherData = it.current.toCurrentWeatherDataUIO()
+                            )
+                        }
+                    }
+                }.onFailure {
+                    intent {
+                        postSideEffect(SideEffect.ShowError(it.message))
+                        reduce {
+                            state.copy(
+                                isLoading = false
+                            )
+                        }
+                    }
+                }
         }
     }
 
@@ -60,12 +75,14 @@ class OverviewViewModel(
     }
 
     sealed class Action {
-        data class LocationDetected(val latitude: Double, val longitude: Double, val countryName: String) : Action()
+        data class LocationDetected(val latitude: Double, val longitude: Double) : Action()
         object ShowMoreClicked : Action()
     }
 
     data class State(
-        val isLoading: Boolean = false,
+        val isLoading: Boolean = true,
+        val latitude: Double = 0.0,
+        val longitude: Double = 0.0,
         val hourlyWeatherData: List<HourlyWeatherDataUIO> = persistentListOf(),
         val currentWeatherData: CurrentWeatherDataUIO? = null
     )

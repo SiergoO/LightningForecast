@@ -8,8 +8,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.sdamashchuk.R
@@ -45,11 +43,11 @@ private fun NavGraphBuilder.onOverviewScreen(
         popEnterTransition = { fadeIn() },
         popExitTransition = { ExitTransition.None }
     ) {
-        screenTitle.value = stringResource(id = R.string.overview_screen_title)
         navigationIconVisibility.value = false
-        OverviewScreen {
-            navController.navigate(NavDestination.Forecast.destination)
-        }
+        OverviewScreen(
+            onAreaDetected = { screenTitle.value = it },
+            navigateToForecast = { navController.navigate(NavDestination.Forecast.destination) }
+        )
     }
 }
 

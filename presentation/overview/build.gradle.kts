@@ -52,7 +52,6 @@ dependencies {
     implementation(Dependency.Compose.ACTIVITY)
     implementation(Dependency.Compose.PREVIEW)
     implementation(Dependency.Compose.TOOLING)
-    implementation(Dependency.Compose.LOTTIE)
 
     implementation(Dependency.OrbitMVI.CORE)
     implementation(Dependency.OrbitMVI.VIEWMODEL)
