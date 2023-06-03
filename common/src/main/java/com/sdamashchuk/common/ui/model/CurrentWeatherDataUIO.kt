@@ -3,11 +3,10 @@ package com.sdamashchuk.common.ui.model
 import android.os.Parcelable
 import androidx.annotation.RawRes
 import kotlinx.parcelize.Parcelize
-import java.time.LocalDateTime
 
 @Parcelize
-data class WeatherDataUIO(
-    val dateTime: LocalDateTime,
+data class CurrentWeatherDataUIO(
+    val isDay: Boolean,
     val temperature: Double,
     val windSpeed: Double,
     val windDirection: Int,
@@ -15,4 +14,4 @@ data class WeatherDataUIO(
     val precipitationProbability: Int,
     val description: String,
     @RawRes val iconRes: Int
-): Parcelable
+) : Parcelable

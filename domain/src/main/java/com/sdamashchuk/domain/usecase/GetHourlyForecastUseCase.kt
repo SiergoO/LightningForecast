@@ -2,21 +2,20 @@ package com.sdamashchuk.domain.usecase;
 
 import com.sdamashchuk.domain.repository.WeatherRepository
 import com.sdamashchuk.domain.usecase.base.UseCase
-import com.sdamashchuk.model.WeatherData
+import com.sdamashchuk.model.HourlyForecast
 import kotlinx.coroutines.CoroutineDispatcher
-import java.time.LocalDateTime
 
 class GetHourlyForecastUseCase(
     private val weatherRepository: WeatherRepository,
     dispatcher: CoroutineDispatcher
-) : UseCase<GetHourlyForecastUseCase.Param, Map<LocalDateTime, WeatherData>>(dispatcher) {
+) : UseCase<GetHourlyForecastUseCase.Param, HourlyForecast>(dispatcher) {
 
     data class Param(
         val latitude: Double,
         val longitude: Double
     )
 
-    override suspend fun execute(parameters: Param): Result<Map<LocalDateTime, WeatherData>> =
+    override suspend fun execute(parameters: Param): Result<HourlyForecast> =
         try {
             val hourlyForecast = weatherRepository.getHourlyForecast(
                 latitude = parameters.latitude,

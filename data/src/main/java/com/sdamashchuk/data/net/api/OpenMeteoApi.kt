@@ -17,7 +17,9 @@ class OpenMeteoApi(private val httpClient: HttpClient) {
         "weathercode"
     )
     private val dailyTags = listOf(
-        "temperature_2m_min", "temperature_2m_max", "weathercode"
+        "temperature_2m_min",
+        "temperature_2m_max",
+        "weathercode"
     )
 
     suspend fun getDailyForecast(

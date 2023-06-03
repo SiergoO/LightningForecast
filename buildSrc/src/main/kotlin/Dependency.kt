@@ -78,6 +78,7 @@ object Dependency {
         const val ESPRESSO_CORE = "androidx.test.espresso:espresso-core:3.5.1"
     }
 
+    const val IMMUTABLE_COLLECTIONS = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5"
     const val SPLASH = "androidx.core:core-splashscreen:1.0.1"
     const val SERIALIZATION = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1"
     const val DATASTORE = "androidx.datastore:datastore-preferences:1.0.0"

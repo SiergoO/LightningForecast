@@ -1,6 +1,9 @@
 package com.sdamashchuk.model
 
-data class WeatherData(
+import java.time.LocalDateTime
+
+data class HourlyWeatherData(
+    val dateTime: LocalDateTime,
     val temperature: Double, // °C
     val windSpeed: Double, // km/h
     val windDirection: Int, // °

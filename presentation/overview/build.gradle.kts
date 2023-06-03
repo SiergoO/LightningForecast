@@ -58,6 +58,8 @@ dependencies {
     implementation(Dependency.OrbitMVI.VIEWMODEL)
     implementation(Dependency.OrbitMVI.COMPOSE)
 
+    implementation(Dependency.IMMUTABLE_COLLECTIONS)
+
     implementation(Dependency.PlayServices.LOCATION)
     implementation(Dependency.PlayServices.PLACES)
 

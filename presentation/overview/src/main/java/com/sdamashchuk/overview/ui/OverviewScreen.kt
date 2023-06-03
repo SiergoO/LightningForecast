@@ -103,8 +103,8 @@ private fun OverviewScreen(
                 }
             }
     ) {
-        items(state.value.hourlyForecast) { weatherData ->
-            if (state.value.hourlyForecast.firstOrNull() == weatherData) {
+        items(state.value.hourlyWeatherData) { weatherData ->
+            if (state.value.hourlyWeatherData.firstOrNull() == weatherData) {
                 Spacer(modifier = Modifier.width(24.dp))
             }
             HourlyForecastChip(
@@ -114,7 +114,7 @@ private fun OverviewScreen(
                 isSelected = false,
                 onSelected = { }
             )
-            if (state.value.hourlyForecast.lastOrNull() == weatherData) {
+            if (state.value.hourlyWeatherData.lastOrNull() == weatherData) {
                 Spacer(modifier = Modifier.width(24.dp))
             } else {
                 Spacer(modifier = Modifier.width(8.dp))

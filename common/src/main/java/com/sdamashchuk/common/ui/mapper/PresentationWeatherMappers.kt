@@ -1,18 +1,31 @@
 package com.sdamashchuk.common.ui.mapper
 
 import com.sdamashchuk.common.R
-import com.sdamashchuk.common.ui.model.WeatherDataUIO
-import com.sdamashchuk.model.WeatherData
+import com.sdamashchuk.common.ui.model.CurrentWeatherDataUIO
+import com.sdamashchuk.common.ui.model.DailyWeatherDataUIO
+import com.sdamashchuk.common.ui.model.HourlyWeatherDataUIO
+import com.sdamashchuk.model.CurrentWeatherData
+import com.sdamashchuk.model.DailyWeatherData
+import com.sdamashchuk.model.HourlyWeatherData
 import com.sdamashchuk.model.WeatherType
 import java.time.LocalDateTime
 import java.time.LocalTime
 
-fun Map<LocalDateTime, WeatherData>.toWeatherDataUIOList(): List<WeatherDataUIO> =
-    this.map { (dateTime, weatherData) ->
-        weatherData.toWeatherDataUIO(dateTime)
-    }
+fun CurrentWeatherData.toCurrentWeatherDataUIO(): CurrentWeatherDataUIO = CurrentWeatherDataUIO(
+    isDay = isDay,
+    temperature = temperature,
+    windSpeed = windSpeed,
+    windDirection = windDirection,
+    humidity = humidity,
+    precipitationProbability = precipitationProbability,
+    description = type.description,
+    iconRes = type.toIconRes(isDay)
+)
 
-fun WeatherData.toWeatherDataUIO(dateTime: LocalDateTime): WeatherDataUIO = WeatherDataUIO(
+fun List<HourlyWeatherData>.toHourlyWeatherDataUIOList(): List<HourlyWeatherDataUIO> =
+    this.map { it.toHourlyWeatherDataUIO() }
+
+fun HourlyWeatherData.toHourlyWeatherDataUIO(): HourlyWeatherDataUIO = HourlyWeatherDataUIO(
     dateTime = dateTime,
     temperature = temperature,
     windSpeed = windSpeed,
@@ -23,7 +36,20 @@ fun WeatherData.toWeatherDataUIO(dateTime: LocalDateTime): WeatherDataUIO = Weat
     iconRes = type.toIconRes(dateTime.isDaytime())
 )
 
-fun WeatherType.toIconRes(isDay: Boolean): Int = if (isDay) {
+fun List<DailyWeatherData>.toDailyWeatherDataUIOList(): List<DailyWeatherDataUIO> =
+    this.map { it.toDailyWeatherDataUIO() }
+
+fun DailyWeatherData.toDailyWeatherDataUIO(): DailyWeatherDataUIO = DailyWeatherDataUIO(
+    date = date,
+    temperatureMin = temperatureMin,
+    temperatureMax = temperatureMax,
+    windSpeedMax = windSpeedMax,
+    precipitationProbabilityMean = precipitationProbabilityMean,
+    description = type.description,
+    iconRes = type.toIconRes(true)
+)
+
+private fun WeatherType.toIconRes(isDay: Boolean): Int = if (isDay) {
     when (this) {
         WeatherType.ClearSky, WeatherType.MainlyClear -> R.raw.clear_day
         WeatherType.PartlyCloudy -> R.raw.partly_cloudy_day
@@ -65,7 +91,7 @@ fun WeatherType.toIconRes(isDay: Boolean): Int = if (isDay) {
 
 fun LocalDateTime.isDaytime(): Boolean {
     val time = this.toLocalTime()
-    val startOfDay = LocalTime.of(6, 0) // Assuming day starts at 6:00 AM
-    val endOfDay = LocalTime.of(18, 0) // Assuming day ends at 6:00 PM
+    val startOfDay = LocalTime.of(4, 0) // Assuming day starts at 6:00 AM
+    val endOfDay = LocalTime.of(21, 0) // Assuming day ends at 6:00 PM
     return time in startOfDay..endOfDay
 }

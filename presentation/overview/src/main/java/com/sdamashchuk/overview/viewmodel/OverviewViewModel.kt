@@ -2,9 +2,13 @@ package com.sdamashchuk.overview.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.sdamashchuk.common.base.BaseViewModel
-import com.sdamashchuk.common.ui.model.WeatherDataUIO
+import com.sdamashchuk.common.ui.mapper.toCurrentWeatherDataUIO
+import com.sdamashchuk.common.ui.mapper.toHourlyWeatherDataUIOList
+import com.sdamashchuk.common.ui.model.CurrentWeatherDataUIO
+import com.sdamashchuk.common.ui.model.HourlyWeatherDataUIO
 import com.sdamashchuk.domain.usecase.GetHourlyForecastUseCase
-import com.sdamashchuk.common.ui.mapper.toWeatherDataUIOList
+import com.sdamashchuk.model.CurrentWeatherData
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -24,7 +28,8 @@ class OverviewViewModel(
                                 reduce {
                                     state.copy(
                                         isLoading = false,
-                                        hourlyForecast = it.toWeatherDataUIOList()
+                                        hourlyWeatherData = it.hourly.toHourlyWeatherDataUIOList(),
+                                        currentWeatherData = it.current.toCurrentWeatherDataUIO()
                                     )
                                 }
                             }
@@ -61,6 +66,7 @@ class OverviewViewModel(
 
     data class State(
         val isLoading: Boolean = false,
-        val hourlyForecast: List<WeatherDataUIO> = listOf()
+        val hourlyWeatherData: List<HourlyWeatherDataUIO> = persistentListOf(),
+        val currentWeatherData: CurrentWeatherDataUIO? = null
     )
 }
