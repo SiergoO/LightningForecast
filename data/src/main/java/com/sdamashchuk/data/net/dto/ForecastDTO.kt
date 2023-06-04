@@ -11,7 +11,7 @@ data class ForecastDTO(
     @SerialName("hourly") val hourly: HourlyDTO?,
     @SerialName("hourly_units") val hourlyUnits: HourlyUnitsDTO?,
     @SerialName("daily") val daily: DailyDTO?,
-    @SerialName("daily_units") val dailyUnits: HourlyUnitsDTO?,
+    @SerialName("daily_units") val dailyUnits: DailyUnitsDTO?,
     @SerialName("latitude") val latitude: Double,
     @SerialName("longitude") val longitude: Double,
     @SerialName("timezone") val timezone: String,

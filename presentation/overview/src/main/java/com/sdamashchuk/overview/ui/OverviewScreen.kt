@@ -55,7 +55,7 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun OverviewScreen(
     onAreaDetected: (String) -> Unit,
-    navigateToForecast: () -> Unit
+    navigateToDailyForecast: () -> Unit
 ) {
     val overviewViewModel = getViewModel<OverviewViewModel>()
     val state = overviewViewModel.collectAsState()
@@ -65,7 +65,7 @@ fun OverviewScreen(
     overviewViewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
             is OverviewViewModel.SideEffect.NavigateToForecast -> {
-                navigateToForecast.invoke()
+                navigateToDailyForecast.invoke()
             }
 
             is OverviewViewModel.SideEffect.ShowError -> {
@@ -88,15 +88,13 @@ fun OverviewScreen(
         detectLocation(context, locationClient, locationDetected)
     }
 
-
-
     if (!state.value.isLoading) {
         OverviewScreen(
             state = state,
             refreshAction = {
                 detectLocation(context, locationClient, locationDetected)
             },
-            showMoreClickedAction = {
+            onShowDailyForecastClicked = {
                 overviewViewModel.sendAction(OverviewViewModel.Action.ShowMoreClicked)
             }
         )
@@ -115,7 +113,7 @@ fun OverviewScreen(
 private fun OverviewScreen(
     state: State<OverviewViewModel.State>,
     refreshAction: () -> Unit,
-    showMoreClickedAction: () -> Unit
+    onShowDailyForecastClicked: () -> Unit
 ) {
     val pullRefreshState = rememberPullRefreshState(
         refreshing = state.value.isLoading,
@@ -178,7 +176,10 @@ private fun OverviewScreen(
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
-        HourlyForecastChipPanel(hourly = state.value.hourlyWeatherData)
+        HourlyForecastChipPanel(
+            hourly = state.value.hourlyWeatherData,
+            onShowDailyForecastClicked = onShowDailyForecastClicked
+        )
     }
 }
 

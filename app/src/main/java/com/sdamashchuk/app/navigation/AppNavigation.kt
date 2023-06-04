@@ -46,7 +46,7 @@ private fun NavGraphBuilder.onOverviewScreen(
         navigationIconVisibility.value = false
         OverviewScreen(
             onAreaDetected = { screenTitle.value = it },
-            navigateToForecast = { navController.navigate(NavDestination.Forecast.destination) }
+            navigateToDailyForecast = { navController.navigate(NavDestination.Forecast.destination) }
         )
     }
 }
@@ -63,8 +63,9 @@ private fun NavGraphBuilder.onForecastScreen(
         popEnterTransition = { fadeIn() },
         popExitTransition = { ExitTransition.None }
     ) {
-        screenTitle.value = stringResource(id = R.string.forecast_screen_title)
         navigationIconVisibility.value = true
-        ForecastScreen()
+        ForecastScreen(
+            onDaySelected = { screenTitle.value = it }
+        )
     }
 }

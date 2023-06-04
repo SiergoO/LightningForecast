@@ -10,6 +10,8 @@ data class DailyWeatherDataUIO(
     val date: LocalDate,
     val temperatureMin: Double,
     val temperatureMax: Double,
+    val sunrise: String,
+    val sunset: String,
     val windSpeedMax: Double,
     val precipitationProbabilityMean: Int,
     val description: String,

@@ -11,4 +11,6 @@ data class DailyDTO(
     @SerialName("temperature_2m_max") val temperature2mMax: List<Double>,
     @SerialName("precipitation_probability_mean") val precipitationProbabilityMean: List<Int>,
     @SerialName("windspeed_10m_max") val windspeed10mMax: List<Double>,
+    @SerialName("sunrise") val sunrise: List<String>,
+    @SerialName("sunset") val sunset: List<String>
 )

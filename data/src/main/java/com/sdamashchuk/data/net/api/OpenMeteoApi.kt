@@ -19,7 +19,11 @@ class OpenMeteoApi(private val httpClient: HttpClient) {
     private val dailyTags = listOf(
         "temperature_2m_min",
         "temperature_2m_max",
-        "weathercode"
+        "weathercode",
+        "precipitation_probability_mean",
+        "windspeed_10m_max",
+        "sunrise",
+        "sunset"
     )
 
     suspend fun getDailyForecast(
@@ -28,7 +32,8 @@ class OpenMeteoApi(private val httpClient: HttpClient) {
     ): ForecastDTO = httpClient.get(BASE_URL) {
         parameter("latitude", latitude)
         parameter("longitude", longitude)
-        parameter("current_weather", true.toString())
+        parameter("current_weather", false)
+        parameter("forecast_days", 10)
         parameter("timezone", "GMT")
         parameter("daily", dailyTags.joinToString(","))
     }.body()
@@ -40,6 +45,7 @@ class OpenMeteoApi(private val httpClient: HttpClient) {
         parameter("latitude", latitude)
         parameter("longitude", longitude)
         parameter("current_weather", true)
+        parameter("forecast_days", 10)
         parameter("timezone", "GMT")
         parameter("hourly", hourlyTags.joinToString(","))
     }.body()

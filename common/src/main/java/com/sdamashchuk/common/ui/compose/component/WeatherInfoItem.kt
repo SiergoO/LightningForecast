@@ -1,10 +1,9 @@
-package com.sdamashchuk.overview.ui
+package com.sdamashchuk.common.ui.compose.component
 
 import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
@@ -21,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.sdamashchuk.common.ui.compose.component.AnimatedIcon
 
 @Composable
-fun CurrentWeatherInfoItem(
+fun WeatherInfoItem(
     modifier: Modifier = Modifier,
     title: String,
     measurement: String,
@@ -38,6 +37,14 @@ fun CurrentWeatherInfoItem(
         )
         Text(
             modifier = Modifier.fillMaxWidth(),
+            text = measurement,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+        Text(
+            modifier = Modifier.fillMaxWidth(),
             text = title,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium,
@@ -45,13 +52,5 @@ fun CurrentWeatherInfoItem(
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = measurement,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onPrimaryContainer
-        )
     }
 }

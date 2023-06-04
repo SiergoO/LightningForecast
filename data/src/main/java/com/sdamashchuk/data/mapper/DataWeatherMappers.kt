@@ -15,18 +15,22 @@ import kotlin.math.roundToInt
 fun ForecastDTO.toDailyForecast(): DailyForecast {
     return DailyForecast(
         daily = if (daily != null) List(daily.time.size) { index ->
-            val time = daily.time[index]
+            val date = daily.time[index]
             val temperatureMin = daily.temperature2mMin[index]
             val temperatureMax = daily.temperature2mMax[index]
             val windSpeedMax = daily.windspeed10mMax[index]
             val precipitationProbabilityMean = daily.precipitationProbabilityMean[index]
+            val sunrise = daily.sunrise[index]
+            val sunset = daily.sunset[index]
             val wmoCode = daily.weatherCode[index]
             DailyWeatherData(
-                date = LocalDate.parse(time, DateTimeFormatter.ISO_DATE_TIME),
+                date = LocalDate.parse(date),
                 temperatureMin = temperatureMin,
                 temperatureMax = temperatureMax,
                 windSpeedMax = windSpeedMax,
                 precipitationProbabilityMean = precipitationProbabilityMean,
+                sunrise = LocalDateTime.parse(sunrise),
+                sunset = LocalDateTime.parse(sunset),
                 type = WeatherType.fromWMO(wmoCode)
             )
         } else listOf(),

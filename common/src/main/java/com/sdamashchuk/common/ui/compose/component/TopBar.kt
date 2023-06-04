@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -38,10 +37,10 @@ fun TopBar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                    start = 8.dp,
-                    end = 16.dp,
-                    bottom = 4.dp
-                ),
+                        start = 8.dp,
+                        end = 48.dp,
+                        bottom = 4.dp
+                    ),
                 text = title,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.headlineLarge,
@@ -50,16 +49,16 @@ fun TopBar(
             )
         },
         navigationIcon = {
-            if (isNavigationIconVisible) {
-                IconButton(
-                    onClick = onBackPressed
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        contentDescription = "Navigate back"
-                    )
-                }
+            IconButton(
+                modifier = Modifier
+                    .alpha(if (isNavigationIconVisible) 1f else 0f),
+                onClick = onBackPressed
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    contentDescription = "Navigate back"
+                )
             }
         }
     )

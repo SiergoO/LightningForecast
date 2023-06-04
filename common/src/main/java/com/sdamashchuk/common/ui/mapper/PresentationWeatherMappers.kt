@@ -4,6 +4,7 @@ import com.sdamashchuk.common.R
 import com.sdamashchuk.common.ui.model.CurrentWeatherDataUIO
 import com.sdamashchuk.common.ui.model.DailyWeatherDataUIO
 import com.sdamashchuk.common.ui.model.HourlyWeatherDataUIO
+import com.sdamashchuk.common.util.toSimpleTime
 import com.sdamashchuk.model.CurrentWeatherData
 import com.sdamashchuk.model.DailyWeatherData
 import com.sdamashchuk.model.HourlyWeatherData
@@ -43,6 +44,8 @@ fun DailyWeatherData.toDailyWeatherDataUIO(): DailyWeatherDataUIO = DailyWeather
     date = date,
     temperatureMin = temperatureMin,
     temperatureMax = temperatureMax,
+    sunrise = sunrise.toSimpleTime(),
+    sunset = sunset.toSimpleTime(),
     windSpeedMax = windSpeedMax,
     precipitationProbabilityMean = precipitationProbabilityMean,
     description = type.description,
