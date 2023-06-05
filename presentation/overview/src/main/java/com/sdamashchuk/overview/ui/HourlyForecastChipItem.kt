@@ -32,7 +32,7 @@ fun HourlyForecastChip(
 ) {
     val chipInteractionSource = remember { MutableInteractionSource() }
     val contentColor = if (isSelected) {
-        MaterialTheme.colorScheme.secondary
+        MaterialTheme.colorScheme.primaryContainer
     } else {
         MaterialTheme.colorScheme.onPrimaryContainer
     }

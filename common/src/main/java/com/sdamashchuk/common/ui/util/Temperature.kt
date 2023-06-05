@@ -1,4 +1,4 @@
-package com.sdamashchuk.common.util
+package com.sdamashchuk.common.ui.util
 
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt

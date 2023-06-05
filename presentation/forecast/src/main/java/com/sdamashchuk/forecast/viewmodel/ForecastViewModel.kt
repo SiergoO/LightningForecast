@@ -1,32 +1,40 @@
 package com.sdamashchuk.forecast.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.sdamashchuk.common.base.BaseViewModel
 import com.sdamashchuk.common.ui.mapper.toDailyWeatherDataUIOList
 import com.sdamashchuk.common.ui.model.DailyWeatherDataUIO
+import com.sdamashchuk.common.ui.model.LocationUIO
 import com.sdamashchuk.domain.usecase.GetDailyForecastUseCase
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 
 class ForecastViewModel(
-    private val getDailyForecastUseCase: GetDailyForecastUseCase
+    private val getDailyForecastUseCase: GetDailyForecastUseCase,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ForecastViewModel.State, ForecastViewModel.SideEffect>(State()) {
+
+    private val location: LocationUIO = checkNotNull(savedStateHandle["location"])
 
     init {
         viewModelScope.launch {
-            getDailyForecastUseCase.invoke(GetDailyForecastUseCase.Param(23.33, 42.11)).onSuccess {
+            getDailyForecastUseCase.invoke(GetDailyForecastUseCase.Param(location.latitude, location.longitude)).onSuccess {
                 intent {
                     reduce {
-                        val dailyWeatherData = it.daily.toDailyWeatherDataUIOList()
+                        val dailyWeatherData = it.daily
+                            .toDailyWeatherDataUIOList()
+                            .toPersistentList()
                         state.copy(
                             isLoading = false,
                             latitude = it.latitude,
                             longitude = it.longitude,
                             dailyWeatherData = dailyWeatherData,
-                            chosenWeatherData = dailyWeatherData.first()
+                            selectedWeatherData = dailyWeatherData.first()
                         )
                     }
                 }
@@ -49,7 +57,7 @@ class ForecastViewModel(
                 intent {
                     reduce {
                         state.copy(
-                            chosenWeatherData = state.dailyWeatherData[action.id]
+                            selectedWeatherData = state.dailyWeatherData[action.id]
                         )
                     }
                 }
@@ -70,6 +78,6 @@ class ForecastViewModel(
         val latitude: Double = 0.0,
         val longitude: Double = 0.0,
         val dailyWeatherData: List<DailyWeatherDataUIO> = persistentListOf(),
-        val chosenWeatherData: DailyWeatherDataUIO? = null
+        val selectedWeatherData: DailyWeatherDataUIO? = null
     )
 }

@@ -9,6 +9,8 @@ import com.sdamashchuk.model.HourlyWeatherData
 import com.sdamashchuk.model.WeatherType
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
@@ -29,8 +31,8 @@ fun ForecastDTO.toDailyForecast(): DailyForecast {
                 temperatureMax = temperatureMax,
                 windSpeedMax = windSpeedMax,
                 precipitationProbabilityMean = precipitationProbabilityMean,
-                sunrise = LocalDateTime.parse(sunrise),
-                sunset = LocalDateTime.parse(sunset),
+                sunrise = sunrise.parseGMT(),
+                sunset = sunset.parseGMT(),
                 type = WeatherType.fromWMO(wmoCode)
             )
         } else listOf(),
@@ -73,4 +75,12 @@ fun ForecastDTO.toHourlyForecast(): HourlyForecast {
         longitude = longitude,
         timezone = timezone
     )
+}
+
+private fun String.parseGMT(): LocalDateTime {
+    val localDateTime = LocalDateTime.parse(this)
+    val zoneId = ZoneId.systemDefault()
+    val zonedDateTime = ZonedDateTime.of(localDateTime, zoneId)
+    val gmtOffsetDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("GMT"))
+    return gmtOffsetDateTime.toLocalDateTime()
 }

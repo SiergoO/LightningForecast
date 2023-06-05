@@ -1,16 +1,17 @@
 package com.sdamashchuk.app.navigation
 
+import android.os.Build
+import android.os.Parcelable
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.sdamashchuk.R
 import com.sdamashchuk.forecast.ui.ForecastScreen
 import com.sdamashchuk.overview.ui.OverviewScreen
 
@@ -46,7 +47,12 @@ private fun NavGraphBuilder.onOverviewScreen(
         navigationIconVisibility.value = false
         OverviewScreen(
             onAreaDetected = { screenTitle.value = it },
-            navigateToDailyForecast = { navController.navigate(NavDestination.Forecast.destination) }
+            navigateToDailyForecast = { location ->
+                navController.navigate(
+                    NavDestination.Forecast.destination,
+                    Pair("location", location)
+                )
+            }
         )
     }
 }
@@ -67,5 +73,17 @@ private fun NavGraphBuilder.onForecastScreen(
         ForecastScreen(
             onDaySelected = { screenTitle.value = it }
         )
+    }
+}
+
+fun NavController.navigate(
+    route: String,
+    vararg args: Pair<String, Parcelable>
+) {
+    navigate(route)
+    requireNotNull(currentBackStackEntry?.arguments).apply {
+        args.forEach { (key: String, arg: Parcelable) ->
+            putParcelable(key, arg)
+        }
     }
 }

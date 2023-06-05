@@ -4,7 +4,7 @@ import com.sdamashchuk.common.R
 import com.sdamashchuk.common.ui.model.CurrentWeatherDataUIO
 import com.sdamashchuk.common.ui.model.DailyWeatherDataUIO
 import com.sdamashchuk.common.ui.model.HourlyWeatherDataUIO
-import com.sdamashchuk.common.util.toSimpleTime
+import com.sdamashchuk.common.ui.util.toSimpleTime
 import com.sdamashchuk.model.CurrentWeatherData
 import com.sdamashchuk.model.DailyWeatherData
 import com.sdamashchuk.model.HourlyWeatherData

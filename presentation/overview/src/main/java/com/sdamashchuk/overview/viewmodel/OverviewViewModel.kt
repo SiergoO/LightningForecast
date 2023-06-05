@@ -6,8 +6,10 @@ import com.sdamashchuk.common.ui.mapper.toCurrentWeatherDataUIO
 import com.sdamashchuk.common.ui.mapper.toHourlyWeatherDataUIOList
 import com.sdamashchuk.common.ui.model.CurrentWeatherDataUIO
 import com.sdamashchuk.common.ui.model.HourlyWeatherDataUIO
+import com.sdamashchuk.common.ui.model.LocationUIO
 import com.sdamashchuk.domain.usecase.GetHourlyForecastUseCase
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -31,8 +33,31 @@ class OverviewViewModel(
                     loadHourlyForecast(action.latitude, action.longitude)
                 }
 
-                is Action.ShowMoreClicked -> {
-                    postSideEffect(SideEffect.NavigateToForecast)
+                is Action.HourlyItemSelected -> {
+                    reduce {
+                        state.copy(
+                            selectedHourlyWeatherData = state.hourlyWeatherData[action.id]
+                        )
+                    }
+                }
+
+                Action.HourlyItemSelectionCanceled -> {
+                    reduce {
+                        state.copy(
+                            selectedHourlyWeatherData = null
+                        )
+                    }
+                }
+
+                Action.ShowMoreClicked -> {
+                    postSideEffect(
+                        SideEffect.NavigateToForecast(
+                            LocationUIO(
+                                state.latitude,
+                                state.longitude
+                            )
+                        )
+                    )
                 }
             }
         }
@@ -51,8 +76,9 @@ class OverviewViewModel(
                                 hourlyWeatherData = it.hourly
                                     .filter { it.dateTime.isAfter(LocalDateTime.now()) }
                                     .take(24)
-                                    .toHourlyWeatherDataUIOList(),
-                                currentWeatherData = it.current.toCurrentWeatherDataUIO()
+                                    .toHourlyWeatherDataUIOList()
+                                    .toPersistentList(),
+                                currentWeatherData = it.current.toCurrentWeatherDataUIO(),
                             )
                         }
                     }
@@ -70,12 +96,14 @@ class OverviewViewModel(
     }
 
     sealed class SideEffect {
-        object NavigateToForecast : SideEffect()
+        data class NavigateToForecast(val location: LocationUIO) : SideEffect()
         data class ShowError(val message: String?) : SideEffect()
     }
 
     sealed class Action {
         data class LocationDetected(val latitude: Double, val longitude: Double) : Action()
+        data class HourlyItemSelected(val id: Int) : Action()
+        object HourlyItemSelectionCanceled : Action()
         object ShowMoreClicked : Action()
     }
 
@@ -84,6 +112,7 @@ class OverviewViewModel(
         val latitude: Double = 0.0,
         val longitude: Double = 0.0,
         val hourlyWeatherData: List<HourlyWeatherDataUIO> = persistentListOf(),
-        val currentWeatherData: CurrentWeatherDataUIO? = null
+        val currentWeatherData: CurrentWeatherDataUIO? = null,
+        val selectedHourlyWeatherData: HourlyWeatherDataUIO? = null
     )
 }

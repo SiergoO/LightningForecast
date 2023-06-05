@@ -30,9 +30,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.sdamashchuk.common.ui.compose.component.AnimatedIcon
-import com.sdamashchuk.common.util.toFullDateString
-import com.sdamashchuk.common.util.toShortenDateString
-import com.sdamashchuk.common.util.toTemperatureString
+import com.sdamashchuk.common.ui.util.toFullDateString
+import com.sdamashchuk.common.ui.util.toShortenDateString
+import com.sdamashchuk.common.ui.util.toShortenDayOfWeekString
+import com.sdamashchuk.common.ui.util.toTemperatureString
 import com.sdamashchuk.forecast.viewmodel.ForecastViewModel
 import org.koin.androidx.compose.getViewModel
 import org.orbitmvi.orbit.compose.collectAsState
@@ -89,7 +90,7 @@ private fun ForecastScreen(
             ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        state.value.chosenWeatherData?.let { chosen ->
+        state.value.selectedWeatherData?.let { chosen ->
             onDaySelected.invoke(chosen.date.toFullDateString())
             Spacer(modifier = Modifier.height(12.dp))
             Row(
@@ -159,12 +160,12 @@ private fun ForecastScreen(
             items(state.value.dailyWeatherData) { data ->
                 DailyForecastItem(
                     modifier = Modifier,
-                    date = data.date.toShortenDateString(),
+                    date = data.date.toShortenDayOfWeekString(),
                     iconRes = data.iconRes,
                     description = data.description,
                     temperatureMin = data.temperatureMin.roundToInt(),
                     temperatureMax = data.temperatureMax.roundToInt(),
-                    state.value.chosenWeatherData == data,
+                    state.value.selectedWeatherData == data,
                     onItemSelected = { onDailyItemSelected.invoke(state.value.dailyWeatherData.indexOf(data)) }
                 )
             }

@@ -26,64 +26,67 @@ import com.sdamashchuk.common.ui.model.HourlyWeatherDataUIO
 fun HourlyForecastChipPanel(
     modifier: Modifier = Modifier,
     hourly: List<HourlyWeatherDataUIO>,
+    selectedItemIndex: Int,
     onShowDailyForecastClicked: () -> Unit,
+    onHourlyForecastClicked: (id: Int) -> Unit,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp)
-                .clickable { onShowDailyForecastClicked.invoke() }
-        ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = "Today",
-                textAlign = TextAlign.Start,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Text(
-                text = "7 days",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            Icon(
-                imageVector = Icons.Default.NavigateNext,
-                contentDescription = "7 days forecast",
-                tint = MaterialTheme.colorScheme.onBackground
-            )
-        }
-        LazyRow(
-            modifier = modifier
-
-                .layout { measurable, constraints ->
-                    val overridenWidth = constraints.maxWidth + 2 * 24.dp.roundToPx()
-                    val placeable = measurable.measure(constraints.copy(maxWidth = overridenWidth))
-                    layout(placeable.width, placeable.height) {
-                        placeable.place(0, 0)
-                    }
-                }
-        ) {
-            items(hourly) { weatherData ->
-                if (hourly.firstOrNull() == weatherData) {
-                    Spacer(modifier = Modifier.width(24.dp))
-                }
-                HourlyForecastChip(
-                    time = "${weatherData.dateTime.hour}:00",
-                    iconRes = weatherData.iconRes,
-                    temperature = weatherData.temperature,
-                    isSelected = false,
-                    onSelected = { }
+        if (hourly.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+                    .clickable { onShowDailyForecastClicked.invoke() }
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = "Today",
+                    textAlign = TextAlign.Start,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
-                if (hourly.lastOrNull() == weatherData) {
-                    Spacer(modifier = Modifier.width(24.dp))
-                } else {
-                    Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "10 days",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+                Icon(
+                    imageVector = Icons.Default.NavigateNext,
+                    contentDescription = "10 days forecast",
+                    tint = MaterialTheme.colorScheme.onBackground
+                )
+            }
+            LazyRow(
+                modifier = modifier
+                    .layout { measurable, constraints ->
+                        val fullWidth = constraints.maxWidth + 2 * 24.dp.roundToPx()
+                        val placeable = measurable.measure(constraints.copy(maxWidth = fullWidth))
+                        layout(placeable.width, placeable.height) {
+                            placeable.place(0, 0)
+                        }
+                    }
+            ) {
+                items(hourly) { weatherData ->
+                    if (hourly.firstOrNull() == weatherData) {
+                        Spacer(modifier = Modifier.width(24.dp))
+                    }
+                    HourlyForecastChip(
+                        time = "${weatherData.dateTime.hour}:00",
+                        iconRes = weatherData.iconRes,
+                        temperature = weatherData.temperature,
+                        isSelected = hourly.indexOf(weatherData) == selectedItemIndex,
+                        onSelected = { onHourlyForecastClicked.invoke(hourly.indexOf(weatherData)) }
+                    )
+                    if (hourly.lastOrNull() == weatherData) {
+                        Spacer(modifier = Modifier.width(24.dp))
+                    } else {
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                 }
             }
         }

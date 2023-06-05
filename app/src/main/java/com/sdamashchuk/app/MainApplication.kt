@@ -14,7 +14,7 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         startKoin {
-            androidLogger(Level.DEBUG)
+            androidLogger(Level.ERROR)
             androidContext(this@MainApplication)
             modules(overviewModule, forecastModule)
             modules(domainModules)

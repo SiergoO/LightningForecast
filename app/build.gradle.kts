@@ -18,6 +18,8 @@ android {
         versionName = AndroidConfig.App.VERSION_NAME
 
         testInstrumentationRunner = AndroidConfig.Test.TEST_INSTRUMENTATION_RUNNER
+
+        signingConfig = signingConfigs.getByName("debug")
     }
 
     buildTypes {

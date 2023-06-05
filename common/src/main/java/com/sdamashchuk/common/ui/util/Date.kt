@@ -1,4 +1,4 @@
-package com.sdamashchuk.common.util
+package com.sdamashchuk.common.ui.util
 
 import java.time.LocalDate
 import java.time.format.TextStyle
@@ -10,6 +10,11 @@ fun LocalDate.toShortenDateString(): String {
     val suffix = getDayOfMonthSuffix(dayOfMonth)
 
     return "$month $dayOfMonth$suffix"
+}
+
+fun LocalDate.toShortenDayOfWeekString(): String {
+    val dayOfWeek = this.dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)
+    return if (this.dayOfMonth == LocalDate.now().dayOfMonth) "Today" else dayOfWeek
 }
 
 fun LocalDate.toFullDateString(): String {

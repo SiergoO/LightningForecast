@@ -50,7 +50,6 @@ dependencies {
 
     implementation(Dependency.Kotlin.REFLECT)
 
-    implementation(Dependency.DATASTORE)
     implementation(Dependency.SERIALIZATION)
     implementation(Dependency.TIMBER)
 

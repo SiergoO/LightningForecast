@@ -45,7 +45,7 @@ class OpenMeteoApi(private val httpClient: HttpClient) {
         parameter("latitude", latitude)
         parameter("longitude", longitude)
         parameter("current_weather", true)
-        parameter("forecast_days", 10)
+        parameter("forecast_days", 2)
         parameter("timezone", "GMT")
         parameter("hourly", hourlyTags.joinToString(","))
     }.body()

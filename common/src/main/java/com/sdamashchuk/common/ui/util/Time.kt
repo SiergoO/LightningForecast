@@ -1,6 +1,8 @@
-package com.sdamashchuk.common.util
+package com.sdamashchuk.common.ui.util
 
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 fun LocalDateTime.toSimpleTime(): String {
